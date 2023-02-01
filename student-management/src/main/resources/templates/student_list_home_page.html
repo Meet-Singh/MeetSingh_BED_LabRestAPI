@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Student Management System</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+
+</head>
+
+<body>
+
+	<nav class="navbar navbar-expand-md bg-primary">
+		<a class="navbar-brand text-white" href="#">Student Management
+			System</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#collapsibleNavbar">
+			<span class="navbar-toggle-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class=" text-white nav-link"
+					th:href="@{/student/list}">Students list</a></li>
+				<li class="nav-item"><a class="text-white nav-link"
+					th:href="@{/student/showFormForAdd}">Add Student</a></li>
+				<li class="nav-item"><a class="text-white nav-link"
+					th:href="@{/logout}">Logout</a></li>
+
+			</ul>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div class="row">
+			<h1>List of Students</h1>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-6 align-items-center mb-1 mt-3">
+				<form th:action="@{/student/search}" method="GET">
+					<input type="text" name="searchKeyword" th:value="${searchKeyword}"
+						placeholder="Search by student name" />
+					<button type="submit" class="btn btn-primary btn-sm mb-1">Search</button>
+					<button type="button"
+						th:onclick="|window.location.href='/student/reset'|"
+						class="btn btn-primary btn-sm mb-1">Reset</button>
+				</form>
+			</div>
+		</div>
+		<table class="table table-striped table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th>Student Id</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Course</th>
+					<th>Country</th>
+					<th
+						th:style="${loggedInUserRole[0].toString() == 'ADMIN' ? '' : 'display:none'}">Actions</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="student: ${studentList}">
+					<td th:text="${student.id}"></td>
+					<td th:text="${student.firstName}"></td>
+					<td th:text="${student.lastName}"></td>
+					<td th:text="${student.course}"></td>
+					<td th:text="${student.country}"></td>
+					<td
+						th:style="${loggedInUserRole[0].toString() == 'ADMIN' ? '' : 'display:none'}"><a
+						th:href="@{/student/showFormForUpdate/{id} (id=${student.id})}"
+						class="btn btn-primary">Edit</a> <a
+						th:href="@{/student/delete/{id} (id=${student.id})}"
+						class="btn btn-danger">Delete</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
